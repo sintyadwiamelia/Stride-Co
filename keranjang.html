@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Stride & Co - Toko Sepatu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        nav a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: blue;
+        }
+        .produk {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .produk-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 200px;
+            text-align: center;
+        }
+        #keranjang {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">Produk</a>
+        <a href="#">Keranjang</a>
+        <a href="#">Kontak</a>
+        <a href="#">Tentang Kami</a>
+    </nav>
+
+    <h1>Stride & Co</h1>
+    <p>Temukan pilihan heels dan sepatu berkualitas dengan gaya modern dan elegan</p>
+
+    <h2>Produk Unggulan</h2>
+    <div class="produk" id="daftar-produk"></div>
+
+    <h2>Keranjang</h2>
+    <ul id="keranjang-list"></ul>
+    <p><strong>Total: Rp <span id="total-harga">0</span></strong></p>
+    <button onclick="checkout()">Checkout</button>
+
+    <script>
+        // Data produk
+        const produk = [
+            { id: 1, nama: "Sepatu Putih", harga: 250000 },
+            { id: 2, nama: "Sepatu Hitam", harga: 275000 },
+            { id: 3, nama: "Sneakers Abu", harga: 300000 }
+        ];
+
+        const keranjang = [];
+
+        // Tampilkan produk
+        const daftarProduk = document.getElementById("daftar-produk");
+        produk.forEach(item => {
+            const div = document.createElement("div");
+            div.className = "produk-item";
+            div.innerHTML = `
+                <img src="https://i0.wp.com/www.footstepfootwear.com/wp-content/uploads/2021/11/Fonte-White-1.jpg" alt="${item.nama}">
+                <h3>${item.nama}</h3>
+                <p>Rp ${item.harga.toLocaleString()}</p>
+                <button onclick="tambahKeKeranjang(${item.id})">Tambah ke Keranjang</button>
+            `;
+            daftarProduk.appendChild(div);
+        });
+
+        // Tambah ke keranjang
+        function tambahKeKeranjang(id) {
+            const item = produk.find(p => p.id === id);
+            keranjang.push(item);
+            updateKeranjang();
+        }
+
+        // Update tampilan keranjang
+        function updateKeranjang() {
+            const list = document.getElementById("keranjang-list");
+            const total = document.getElementById("total-harga");
+            list.innerHTML = "";
+            let totalHarga = 0;
+
+            keranjang.forEach((item, index) => {
+                const li = document.createElement("li");
+                li.innerHTML = `${item.nama} - Rp ${item.harga.toLocaleString()} 
+                <button onclick="hapusItem(${index})">Hapus</button>`;
+                list.appendChild(li);
+                totalHarga += item.harga;
+            });
+
+            total.textContent = totalHarga.toLocaleString();
+        }
+
+        // Hapus item dari keranjang
+        function hapusItem(index) {
+            keranjang.splice(index, 1);
+            updateKeranjang();
+        }
+
+        // Checkout (simulasi)
+        function checkout() {
+            if (keranjang.length === 0) {
+                alert("Keranjang masih kosong!");
+            } else {
+                alert("Terima kasih! Pesanan Anda telah diproses.");
+                keranjang.length = 0;
+                updateKeranjang();
+            }
+        }
+    </script>
+
+</body>
+</html>
